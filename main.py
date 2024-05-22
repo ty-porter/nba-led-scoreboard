@@ -1,22 +1,19 @@
 from datetime import datetime, timedelta
 from data.scoreboard_config import ScoreboardConfig
 from renderer.main import MainRenderer
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from utils import args, led_matrix_options
+from RGBMatrixDriver import RGBMatrix, RGBMatrixOptions, prefilled_matrix_options
+from utils import args
 from data.data import Data
 import debug
 
 SCRIPT_NAME = "NBA Scoreboard"
 SCRIPT_VERSION = "1.0.0"
 
-# Get supplied command line arguments
-args = args()
-
 # Check for led configuration arguments
-matrixOptions = led_matrix_options(args)
+command_line_args = args()
 
 # Initialize the matrix
-matrix = RGBMatrix(options = matrixOptions)
+matrix = RGBMatrix(options=prefilled_matrix_options(command_line_args))
 
 # Print some basic info on startup
 debug.info("{} - v{} ({}x{})".format(SCRIPT_NAME, SCRIPT_VERSION, matrix.width, matrix.height))

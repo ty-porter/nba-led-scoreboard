@@ -2,7 +2,7 @@
 import time
 import sys
 
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
+from RGBMatrixDriver import RGBMatrix, RGBMatrixOptions
 from PIL import Image
 
 if len(sys.argv) < 2:
@@ -22,7 +22,7 @@ options.hardware_mapping = 'regular'  # If you have an Adafruit HAT: 'adafruit-h
 matrix = RGBMatrix(options = options)
 
 # Make image fit our screen.
-image.thumbnail((matrix.width, matrix.height), Image.ANTIALIAS)
+image.thumbnail((matrix.width, matrix.height), Image.LANCZOS)
 
 matrix.SetImage(image.convert('RGB'))
 

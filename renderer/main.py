@@ -1,6 +1,6 @@
 from PIL import Image, ImageFont, ImageDraw, ImageSequence
-from rgbmatrix import graphics
-from utils import center_text
+from RGBMatrixDriver import graphics
+from utils import center_text, getsize
 from calendar import month_abbr
 from renderer.screen_config import screenConfig
 from datetime import datetime, timedelta
@@ -32,7 +32,7 @@ class MainRenderer:
         self.draw = ImageDraw.Draw(self.image)
 
     def display_nba_logo(self):
-        nba_logo = Image.open('logos/NBA.png').resize((22, 22), Image.ANTIALIAS)
+        nba_logo = Image.open('logos/NBA.png').resize((22, 22), Image.LANCZOS)
         self.canvas.SetImage(nba_logo.convert("RGB"), 22, 1)
 
     def display_team_logos(self, game, away_logo_position, home_logo_position):
@@ -45,8 +45,8 @@ class MainRenderer:
         """
         self.canvas.SetImage(self.image, 0, 0)
         if self.data.nba_logos:
-            away_team_logo = Image.open('logos/{}H.png'.format(game['awayteam'])).resize((20, 20), Image.ANTIALIAS)
-            home_team_logo = Image.open('logos/{}H.png'.format(game['hometeam'])).resize((20, 20), Image.ANTIALIAS)
+            away_team_logo = Image.open('logos/{}H.png'.format(game['awayteam'])).resize((20, 20), Image.LANCZOS)
+            home_team_logo = Image.open('logos/{}H.png'.format(game['hometeam'])).resize((20, 20), Image.LANCZOS)
         else:
             away_team_logo = Image.open('logos/{}.png'.format(game['awayteam'])).resize((20, 20), Image.BOX)
             home_team_logo = Image.open('logos/{}.png'.format(game['hometeam'])).resize((20, 20), Image.BOX)
@@ -139,7 +139,7 @@ class MainRenderer:
 
 
     def loading(self):
-        loading_pos = center_text(self.font_mini.getsize('Loading')[0], 32)
+        loading_pos = center_text(getsize(self.font_mini, 'Loading'), 32)
         self.draw.multiline_text((loading_pos, 24), 'Loading...', font=self.font_mini, align="center")
         self.canvas.SetImage(self.image, 0, 0)
         self.display_nba_logo()
@@ -182,8 +182,8 @@ class MainRenderer:
         game_time = game_datetime.strftime("%-I:%M %p")
 
         # Center the game time on screen
-        date_pos = center_text(self.font_mini.getsize(date_text)[0], 32)
-        game_time_pos = center_text(self.font_mini.getsize(game_time)[0], 32)
+        date_pos = center_text(getsize(self.font_mini, date_text), 32)
+        game_time_pos = center_text(getsize(self.font_mini, game_time), 32)
 
         # Draw the text on the Data image
         self.draw.text((date_pos, 0), date_text, font=self.font_mini)
@@ -217,7 +217,7 @@ class MainRenderer:
                 countdown = ':'.join(str(remaining_time).split(':')[1:]).split('.')[0]
 
             # Center the countdown on screen
-            countdown_pos = center_text(self.font_mini.getsize(countdown)[0], 32)
+            countdown_pos = center_text(getsize(self.font_mini, countdown), 32)
 
             # Draw the countdown text
             self.draw.text((29, 0), 'IN', font=self.font_mini)
@@ -251,13 +251,13 @@ class MainRenderer:
         # Set the position of the information on screen.
         homescore = '{0:02d}'.format(homescore)
         awayscore = '{0:02d}'.format(awayscore)
-        home_score_size = self.font.getsize(homescore)[0]
-        home_score_pos = center_text(self.font.getsize(homescore)[0], 16)
-        away_score_pos = center_text(self.font.getsize(awayscore)[0], 48)
-        time_period_pos = center_text(self.font_mini.getsize(time_period)[0], 32)
-        # score_position = center_text(self.font.getsize(score)[0], 32)
-        quarter_position = center_text(self.font_mini.getsize(quarter)[0], 32)
-        # info_pos = center_text(self.font_mini.getsize(pos)[0], 32)
+        home_score_size = getsize(self.font, homescore)
+        home_score_pos = center_text(getsize(self.font, homescore), 16)
+        away_score_pos = center_text(getsize(self.font, awayscore), 48)
+        time_period_pos = center_text(getsize(self.font_mini, time_period), 32)
+        # score_position = center_text(getsize(self.font, score), 32)
+        quarter_position = center_text(getsize(self.font_mini, quarter), 32)
+        # info_pos = center_text(getsize(self.font_mini, pos), 32)
         # self.draw.multiline_text((info_pos, 13), pos, fill=pos_colour, font=self.font_mini, align="center")
 
         self.draw.multiline_text((quarter_position, 0), quarter, fill=(255, 255, 255), font=self.font_mini, align="center")
@@ -284,7 +284,7 @@ class MainRenderer:
         # Prepare the data
         score = '{}-{}'.format(game['awayscore'], game['homescore'])
         # Set the position of the information on screen.
-        score_position = center_text(self.font.getsize(score)[0], 32)
+        score_position = center_text(getsize(self.font, score), 32)
         # Draw the text on the Data image.
         self.draw.multiline_text((score_position, 19), score, fill=(255, 255, 255), font=self.font, align="center")
         self.draw.multiline_text((26, 0), "END", fill=(255, 255, 255), font=self.font_mini,align="center")

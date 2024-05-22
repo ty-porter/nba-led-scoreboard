@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from samplebase import SampleBase
-from rgbmatrix import graphics
+from RGBMatrixDriver import graphics
 import time
 
 
