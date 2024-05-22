@@ -9,7 +9,7 @@
 # Note that PIL graphics do not have an immediate effect on the display --
 # image is drawn into a separate buffer, which is then copied to the matrix
 # using the SetImage() function (see examples below).
-# Requires RGBMatrixDriver.so present in the same directory.
+# Requires rgbmatrix.so present in the same directory.
 
 # PIL Image module (create or load images) is explained here:
 # http://effbot.org/imagingbook/image.htm
